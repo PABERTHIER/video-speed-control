@@ -39,7 +39,7 @@
   }
 
   function setSpeed(speed) {
-    currentSpeed = clamp(Math.round(speed * 100) / 100, 0.25, 4.0);
+    currentSpeed = clamp(Math.round(speed * 10) / 10, 0.1, 16.0);
     updateUI();
 
     chrome.storage.local.set({ playbackSpeed: currentSpeed });
