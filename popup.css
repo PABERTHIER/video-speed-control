@@ -1,0 +1,179 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  min-width: 280px;
+  max-width: 280px;
+}
+
+.container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+header h1 {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: #f0f0f0;
+  letter-spacing: 0.5px;
+}
+
+/* Speed display */
+.speed-display {
+  text-align: center;
+  padding: 10px 0;
+}
+
+#speed-value {
+  font-size: 42px;
+  font-weight: 700;
+  color: #ff6b35;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  font-size: 24px;
+  font-weight: 400;
+  color: #ff6b35;
+  opacity: 0.7;
+}
+
+/* Slider row */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adjust-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #444;
+  background: #2a2a3e;
+  color: #e0e0e0;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.adjust-btn:hover {
+  background: #ff6b35;
+  border-color: #ff6b35;
+  color: #fff;
+}
+
+.adjust-btn:active {
+  transform: scale(0.92);
+}
+
+/* Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: #333;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ff6b35;
+  border: 2px solid #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Preset buttons */
+.presets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.preset {
+  padding: 7px 0;
+  border-radius: 6px;
+  border: 1.5px solid #333;
+  background: #2a2a3e;
+  color: #ccc;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.preset:hover {
+  border-color: #ff6b35;
+  color: #fff;
+}
+
+.preset.active {
+  background: #ff6b35;
+  border-color: #ff6b35;
+  color: #fff;
+  font-weight: 600;
+}
+
+.preset:active {
+  transform: scale(0.95);
+}
+
+/* Reset button */
+.reset-btn {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1.5px solid #444;
+  background: transparent;
+  color: #aaa;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.reset-btn:hover {
+  border-color: #ff6b35;
+  color: #ff6b35;
+}
+
+/* Status */
+.status {
+  font-size: 11px;
+  text-align: center;
+  color: #888;
+  min-height: 14px;
+}
+
+.status.error {
+  color: #ff4444;
+}
+
+.status.success {
+  color: #44bb44;
+}

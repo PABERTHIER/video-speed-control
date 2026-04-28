@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="popup.css">
+  <title>Video Speed Controller</title>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚡ Speed Control</h1>
+    </header>
+
+    <div class="speed-display">
+      <span id="speed-value">1.0</span><span class="unit">×</span>
+    </div>
+
+    <div class="slider-row">
+      <button class="adjust-btn" id="btn-minus" title="−0.25×">−</button>
+      <input type="range" id="speed-slider" min="0.25" max="4" step="0.1" value="1">
+      <button class="adjust-btn" id="btn-plus" title="+0.25×">+</button>
+    </div>
+
+    <div class="presets">
+      <button class="preset" data-speed="0.5">0.5×</button>
+      <button class="preset" data-speed="0.75">0.75×</button>
+      <button class="preset active" data-speed="1">1×</button>
+      <button class="preset" data-speed="1.25">1.25×</button>
+      <button class="preset" data-speed="1.5">1.5×</button>
+      <button class="preset" data-speed="1.75">1.75×</button>
+      <button class="preset" data-speed="2">2×</button>
+      <button class="preset" data-speed="3">3×</button>
+    </div>
+
+    <button class="reset-btn" id="btn-reset">Reset to 1×</button>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
