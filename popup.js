@@ -10,14 +10,31 @@
   const status = document.getElementById("status");
 
   let currentSpeed = 1.0;
+  let currentTabId = null;
+  let sliderTimeout = null;
 
-  // Initialize: load stored speed
-  chrome.storage.local.get("playbackSpeed", (data) => {
-    if (data.playbackSpeed) {
-      currentSpeed = data.playbackSpeed;
+  // Initialize: cache tab ID once, then read current speed + video count from content script
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    currentTabId = tabs[0]?.id ?? null;
+    if (!currentTabId) {
+      updateUI();
+      return;
     }
-    updateUI();
-    queryCurrentTab();
+    chrome.tabs.sendMessage(currentTabId, { type: "getSpeed" }, (response) => {
+      if (chrome.runtime.lastError || !response) {
+        showStatus("No video found on this page", "error");
+        updateUI();
+        return;
+      }
+      currentSpeed = response.speed ?? 1.0;
+      updateUI();
+      const count = response.videoCount || 0;
+      if (count > 0) {
+        showStatus(`${count} video${count > 1 ? "s" : ""} detected`, "success");
+      } else {
+        showStatus("No video found on this page", "");
+      }
+    });
   });
 
   function updateUI() {
@@ -38,55 +55,37 @@
     return rounded.toFixed(2);
   }
 
-  function setSpeed(speed) {
-    currentSpeed = clamp(Math.round(speed * 10) / 10, 0.1, 16.0);
-    updateUI();
-
-    chrome.storage.local.set({ playbackSpeed: currentSpeed });
-
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (!tabs[0]?.id) {
-        showStatus("No active tab", "error");
-        return;
-      }
-      chrome.tabs.sendMessage(
-        tabs[0].id,
-        { type: "setSpeed", speed: currentSpeed },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            showStatus("No video found on this page", "error");
-            return;
-          }
-          if (response?.success) {
-            showStatus(`Speed set to ${formatSpeed(currentSpeed)}×`, "success");
-          }
-        }
-      );
-    });
+  function normalizeSpeed(speed) {
+    return clamp(Math.round(speed * 100) / 100, 0.1, 16.0);
   }
 
-  function queryCurrentTab() {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (!tabs[0]?.id) return;
-      chrome.tabs.sendMessage(
-        tabs[0].id,
-        { type: "getSpeed" },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            showStatus("No video found on this page", "error");
-            return;
-          }
-          if (response) {
-            const count = response.videoCount || 0;
-            if (count > 0) {
-              showStatus(`${count} video${count > 1 ? "s" : ""} detected`, "success");
-            } else {
-              showStatus("No video found on this page", "");
-            }
-          }
+  function flushSpeedToTab() {
+    if (!currentTabId) {
+      showStatus("No active tab", "error");
+      return;
+    }
+    // Send setTabSpeed synchronously (no async dependency) so it always fires
+    // even if the popup closes immediately after the user interaction
+    chrome.runtime.sendMessage({ type: "setTabSpeed", tabId: currentTabId, speed: currentSpeed });
+    chrome.tabs.sendMessage(
+      currentTabId,
+      { type: "setSpeed", speed: currentSpeed },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          showStatus("No video found on this page", "error");
+          return;
         }
-      );
-    });
+        if (response?.success) {
+          showStatus(`Speed set to ${formatSpeed(currentSpeed)}x`, "success");
+        }
+      }
+    );
+  }
+
+  function setSpeed(speed) {
+    currentSpeed = normalizeSpeed(speed);
+    updateUI();
+    flushSpeedToTab();
   }
 
   function showStatus(text, type) {
@@ -99,8 +98,17 @@
   }
 
   // Event listeners
+  // Slider: UI updates immediately; IPC is throttled to avoid flooding the message bus
   slider.addEventListener("input", () => {
-    setSpeed(parseFloat(slider.value));
+    currentSpeed = normalizeSpeed(parseFloat(slider.value));
+    updateUI();
+    clearTimeout(sliderTimeout);
+    sliderTimeout = setTimeout(flushSpeedToTab, 50);
+  });
+
+  slider.addEventListener("change", () => {
+    clearTimeout(sliderTimeout);
+    flushSpeedToTab();
   });
 
   btnMinus.addEventListener("click", () => {

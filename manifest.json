@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "Control video playback speed on any website with a clean, minimal interface.",
   "permissions": ["storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
