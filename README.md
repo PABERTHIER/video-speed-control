@@ -9,9 +9,9 @@ A minimal, clean browser extension that lets you control the playback speed of *
 
 - **Universal compatibility** — works on any website with HTML5 `<video>` elements
 - **Handles multiple videos** — controls all videos on a page (great for Prime Video, Facebook, etc.)
-- **Preset speed buttons** — quickly pick from 0.5×, 0.75×, 1×, 1.25×, 1.5×, 1.75×, 2×, 3×
-- **Fine-tuning slider** — adjust speed from 0.25× to 4× with a smooth slider
-- **± buttons** — increment/decrement speed by 0.25× steps
+- **Preset speed buttons** — quickly pick from 0.5x, 0.75x, 1x, 1.25x, 1.5x, 1.75x, 2x, 3x
+- **Fine-tuning slider** — adjust speed from 0.1x to 16x with a smooth slider
+- **± buttons** — increment/decrement speed by 0.25x steps
 - **Persistent speed** — your chosen speed is saved and applied automatically on page load
 - **Dynamic video detection** — detects videos loaded dynamically (SPA navigation, lazy loading)
 - **Resilient** — re-applies your speed when the player tries to reset it (seek, quality change, etc.)
@@ -44,10 +44,10 @@ Since this is an unpacked extension (not published on the Chrome Web Store), you
 2. **Click the ⚡ extension icon** in the toolbar to open the speed controller
 
 3. **Choose your speed:**
-   - Click a **preset button** (0.5× to 3×) for common speeds
-   - Use the **slider** for fine control (0.25× to 4×)
-   - Use the **−** / **+** buttons to adjust by 0.25× increments
-   - Click **Reset to 1×** to go back to normal speed
+   - Click a **preset button** (0.5x to 3x) for common speeds
+   - Use the **slider** for fine control (0.1x to 16x)
+   - Use the **−** / **+** buttons to adjust by 0.25x increments
+   - Click **Reset to 1x** to go back to normal speed
 
 4. The status bar at the bottom shows how many videos were detected on the page
 
