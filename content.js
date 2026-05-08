@@ -12,6 +12,17 @@
     }
     applySpeedToAll();
     observeDOM();
+
+    // Periodically re-scan for video elements that the MutationObserver may have
+    // missed. This handles players (e.g. Twitch/Hls.js) that call attachShadow()
+    // *after* the host element is already in the DOM: at the time the observer
+    // fires for the node addition, shadowRoot is still null, so the shadow tree
+    // and the <video> inside it are never registered. The interval catches that
+    // within 2 s without needing to patch Element.prototype.attachShadow.
+    setInterval(() => {
+      attachShadowObservers(document.documentElement);
+      applySpeedToAll();
+    }, 2000);
   });
 
   // Listen for speed changes from popup
